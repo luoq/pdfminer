@@ -98,7 +98,7 @@ class PDFLayoutAnalyzer(PDFTextDevice):
         # other shapes
         pts = []
         for p in path:
-            for i in xrange(1, len(p), 2):
+            for i in range(1, len(p), 2):
                 pts.append(apply_matrix_pt(self.ctm, (p[i], p[i+1])))
         self.cur_item.add(LTCurve(gstate.linewidth, pts))
         return
@@ -106,7 +106,7 @@ class PDFLayoutAnalyzer(PDFTextDevice):
     def render_char(self, matrix, font, fontsize, scaling, rise, cid):
         try:
             text = font.to_unichr(cid)
-            assert isinstance(text, unicode), text
+            assert isinstance(text, str), text
         except PDFUnicodeNotDefined:
             text = self.handle_undefined_char(font, cid)
         textwidth = font.char_width(cid)
@@ -251,7 +251,7 @@ class HTMLConverter(PDFConverter):
 
     def write_footer(self):
         self.write('<div style="position:absolute; top:0px;">Page: %s</div>\n' %
-                   ', '.join('<a href="#%s">%s</a>' % (i, i) for i in xrange(1, self.pageno)))
+                   ', '.join('<a href="#%s">%s</a>' % (i, i) for i in range(1, self.pageno)))
         self.write('</body></html>\n')
         return
 
@@ -398,7 +398,7 @@ class HTMLConverter(PDFConverter):
 ##
 class XMLConverter(PDFConverter):
 
-    CONTROL = re.compile(ur'[\x00-\x08\x0b-\x0c\x0e-\x1f]')
+    CONTROL = re.compile(r'[\x00-\x08\x0b-\x0c\x0e-\x1f]')
 
     def __init__(self, rsrcmgr, outfp, codec='utf-8', pageno=1,
                  laparams=None, imagewriter=None, stripcontrol=False):
@@ -419,7 +419,7 @@ class XMLConverter(PDFConverter):
 
     def write_text(self, text):
         if self.stripcontrol:
-            text = self.CONTROL.sub(u'', text)
+            text = self.CONTROL.sub('', text)
         self.outfp.write(enc(text, self.codec))
         return
 
